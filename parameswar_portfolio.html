@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARAMESWAR_E :: PORTFOLIO.SYS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Bebas+Neue&family=Oxanium:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050a05;--bg2:#080e08;--bg3:#0c140c;--surface:#0f180f;--surface2:#141f14;--border:#1a2e1a;--green:#00ff41;--green2:#00cc33;--cyan:#00f5ff;--cyan2:#00bcd4;--amber:#ffb300;--red:#ff3333;--dim:#1a3a1a;--text:#c8ffc8;--text2:#7ab87a;--text3:#3d6b3d;--font-mono:'JetBrains Mono',monospace;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oxanium',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-mono);font-size:14px;line-height:1.6;overflow-x:hidden;cursor:crosshair;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,65,.015) 2px,rgba(0,255,65,.015) 4px);pointer-events:none;z-index:9998;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.7) 100%);pointer-events:none;z-index:9997;}
+#bios{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;padding:40px;font-family:var(--font-mono);overflow:hidden;}
+#bios.hidden{display:none;}
+.bios-line{color:#aaa;font-size:13px;line-height:1.8;}
+.bios-line.green{color:var(--green);}
+.bios-line.cyan{color:var(--cyan);}
+.bios-line.amber{color:var(--amber);}
+.bios-line.white{color:#fff;}
+.bios-line.dim{color:#444;}
+#bios-bar-wrap{margin-top:20px;display:flex;align-items:center;gap:12px;}
+.bios-bar-label{color:var(--cyan);font-size:13px;}
+#bios-bar{width:300px;height:14px;border:1px solid var(--green2);position:relative;overflow:hidden;}
+#bios-bar-fill{height:100%;background:var(--green);width:0%;transition:width .1s linear;box-shadow:0 0 8px var(--green);}
+#bios-bar-pct{color:var(--green);font-size:13px;min-width:40px;}
+#skip-btn{position:absolute;bottom:40px;right:40px;background:transparent;border:1px solid var(--text3);color:var(--text3);font-family:var(--font-mono);font-size:12px;padding:6px 14px;cursor:pointer;transition:all .2s;}
+#skip-btn:hover{border-color:var(--green);color:var(--green);}
+#main{opacity:0;transition:opacity .6s;}
+#main.visible{opacity:1;}
+nav{position:fixed;top:0;left:0;right:0;height:46px;background:rgba(5,10,5,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:1000;backdrop-filter:blur(8px);}
+.nav-left{display:flex;align-items:center;gap:16px;}
+.nav-logo{font-family:var(--font-display);font-size:20px;color:var(--green);letter-spacing:2px;text-shadow:0 0 12px var(--green);}
+.nav-sep{color:var(--text3);}
+.nav-status{font-size:11px;color:var(--green2);display:flex;align-items:center;gap:6px;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:12px;padding:4px 10px;border:1px solid transparent;transition:all .2s;font-family:var(--font-mono);letter-spacing:.5px;}
+.nav-links a:hover{color:var(--green);border-color:var(--dim);background:rgba(0,255,65,.05);text-shadow:0 0 8px var(--green);}
+.nav-links a::before{content:'./';color:var(--text3);}
+.nav-right{display:flex;align-items:center;gap:16px;font-size:12px;}
+#live-clock{color:var(--cyan);font-family:var(--font-mono);text-shadow:0 0 8px var(--cyan);letter-spacing:1px;}
+#live-date{color:var(--text3);font-size:11px;}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 60px 60px;position:relative;overflow:hidden;}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,65,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,65,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.hero-corner{position:absolute;font-size:11px;color:var(--text3);font-family:var(--font-mono);}
+.hero-corner.tl{top:60px;left:60px;}
+.hero-corner.tr{top:60px;right:60px;text-align:right;}
+.hero-corner.bl{bottom:60px;left:60px;}
+.hero-corner.br{bottom:60px;right:60px;text-align:right;}
+.hero-eyebrow{font-family:var(--font-mono);font-size:13px;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.hero-eyebrow::before{content:'';display:inline-block;width:40px;height:1px;background:var(--cyan);box-shadow:0 0 6px var(--cyan);}
+.hero-name{font-family:var(--font-display);font-size:clamp(64px,9vw,120px);line-height:.95;letter-spacing:4px;color:var(--green);text-shadow:0 0 30px rgba(0,255,65,.4),0 0 60px rgba(0,255,65,.15);position:relative;display:inline-block;}
+.hero-name::before,.hero-name::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;}
+.hero-name::before{color:var(--cyan);animation:glitch1 4s infinite;clip-path:polygon(0 0,100% 0,100% 35%,0 35%);opacity:0;}
+.hero-name::after{color:var(--red);animation:glitch2 4s infinite;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);opacity:0;}
+@keyframes glitch1{0%,90%,100%{opacity:0;transform:none;}92%{opacity:.8;transform:translateX(-4px);}94%{opacity:.8;transform:translateX(4px);}96%{opacity:0;}}
+@keyframes glitch2{0%,90%,100%{opacity:0;transform:none;}93%{opacity:.8;transform:translateX(4px);}95%{opacity:.8;transform:translateX(-4px);}97%{opacity:0;}}
+.hero-title-line{font-family:var(--font-ui);font-size:clamp(18px,2.5vw,28px);color:var(--text2);font-weight:300;letter-spacing:6px;text-transform:uppercase;margin-top:12px;margin-bottom:40px;}
+.hero-title-line span{color:var(--amber);}
+.terminal-window{background:var(--surface);border:1px solid var(--border);border-radius:4px;max-width:600px;box-shadow:0 0 30px rgba(0,255,65,.08),inset 0 0 30px rgba(0,0,0,.5);position:relative;}
+.terminal-titlebar{background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.terminal-dots{display:flex;gap:6px;}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot.r{background:#ff5f57;}
+.dot.y{background:#febc2e;}
+.dot.g{background:var(--green2);box-shadow:0 0 4px var(--green);}
+.terminal-label{font-size:12px;color:var(--text3);margin-left:8px;flex:1;text-align:center;}
+.terminal-body{padding:18px;min-height:160px;font-size:13px;line-height:1.9;}
+.terminal-prompt{color:var(--green);display:flex;align-items:flex-start;gap:8px;}
+.terminal-prompt .prompt-sym{color:var(--green);white-space:nowrap;}
+.terminal-prompt .prompt-text{color:var(--text);}
+#typing-output{color:var(--cyan2);display:block;min-height:26px;white-space:pre-line;}
+.cursor-blink{display:inline-block;width:9px;height:15px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-meta{margin-top:36px;display:flex;gap:24px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:6px 12px;border:1px solid var(--border);background:var(--surface);}
+.hero-badge .icon{color:var(--amber);}
+.hero-badge .val{color:var(--text);}
+.hero-cta{margin-top:40px;display:flex;gap:16px;flex-wrap:wrap;}
+.btn-primary{background:transparent;border:1px solid var(--green);color:var(--green);font-family:var(--font-mono);font-size:13px;padding:12px 28px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;text-transform:uppercase;letter-spacing:2px;position:relative;overflow:hidden;}
+.btn-primary::before{content:'';position:absolute;inset:0;background:var(--green);transform:translateX(-100%);transition:transform .2s;z-index:-1;}
+.btn-primary:hover{color:#000;box-shadow:0 0 20px rgba(0,255,65,.4);}
+.btn-primary:hover::before{transform:translateX(0);}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text2);font-family:var(--font-mono);font-size:13px;padding:12px 28px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;text-transform:uppercase;letter-spacing:2px;}
+.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(0,245,255,.2);}
+section{padding:100px 60px;position:relative;}
+.section-header{margin-bottom:60px;display:flex;align-items:center;gap:20px;}
+.section-num{font-family:var(--font-mono);font-size:12px;color:var(--text3);letter-spacing:2px;}
+.section-title{font-family:var(--font-display);font-size:clamp(36px,5vw,56px);color:var(--green);letter-spacing:3px;text-shadow:0 0 20px rgba(0,255,65,.3);line-height:1;}
+.section-line{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+#skills{background:var(--bg2);}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px;}
+.skill-card{background:var(--surface);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden;transition:all .25s;cursor:default;}
+.skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transition:transform .25s;transform-origin:left;}
+.skill-card:hover{border-color:var(--green2);background:var(--surface2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.skill-card:hover::before{transform:scaleX(1);}
+.skill-cat{font-size:10px;color:var(--amber);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.skill-cat::before{content:'';width:16px;height:1px;background:var(--amber);}
+.skill-name{font-family:var(--font-ui);font-size:18px;color:var(--text);font-weight:600;margin-bottom:12px;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.tag{font-size:11px;color:var(--text3);border:1px solid var(--dim);padding:2px 7px;transition:all .2s;}
+.skill-card:hover .tag{color:var(--text2);border-color:var(--green2);}
+#experience{background:var(--bg);}
+.timeline{position:relative;padding-left:40px;}
+.timeline::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--green),var(--border),transparent);}
+.timeline-item{position:relative;margin-bottom:50px;padding-left:30px;}
+.timeline-dot{position:absolute;left:-48px;top:8px;width:14px;height:14px;border:2px solid var(--green);background:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(0,255,65,.5);}
+.timeline-dot::after{content:'';width:6px;height:6px;background:var(--green);animation:pulse 2s infinite;}
+.timeline-period{font-size:11px;color:var(--amber);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.timeline-role{font-family:var(--font-ui);font-size:22px;color:var(--text);font-weight:700;margin-bottom:4px;}
+.timeline-org{font-size:13px;color:var(--cyan);margin-bottom:16px;}
+.timeline-body{background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--green2);padding:20px;}
+.timeline-body ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.timeline-body li{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:10px;line-height:1.6;}
+.timeline-body li::before{content:'▸';color:var(--green);flex-shrink:0;margin-top:1px;}
+#projects{background:var(--bg2);}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;}
+.project-card{background:var(--surface);border:1px solid var(--border);padding:28px;position:relative;overflow:hidden;transition:all .3s;display:flex;flex-direction:column;gap:14px;}
+.project-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--cyan),var(--green));transform:scaleX(0);transition:transform .3s;transform-origin:left;}
+.project-card:hover{border-color:var(--cyan2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.5),0 0 20px rgba(0,245,255,.08);}
+.project-card:hover::after{transform:scaleX(1);}
+.project-idx{font-size:11px;color:var(--text3);font-family:var(--font-mono);letter-spacing:2px;}
+.project-name{font-family:var(--font-ui);font-size:20px;font-weight:700;color:var(--text);line-height:1.2;}
+.project-stack{display:flex;flex-wrap:wrap;gap:6px;}
+.stack-tag{font-size:11px;background:var(--dim);color:var(--cyan);border:1px solid rgba(0,245,255,.15);padding:3px 9px;font-family:var(--font-mono);}
+.project-desc{font-size:12px;color:var(--text2);line-height:1.7;flex:1;list-style:none;display:flex;flex-direction:column;gap:4px;}
+.project-desc li{display:flex;align-items:flex-start;gap:8px;}
+.project-desc li::before{content:'//';color:var(--text3);flex-shrink:0;}
+.project-featured{border-color:var(--cyan2);background:linear-gradient(135deg,var(--surface) 0%,rgba(0,245,255,.03) 100%);}
+.project-featured .project-name{color:var(--cyan);}
+#certs{background:var(--bg);}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.cert-card{background:var(--surface);border:1px solid var(--border);padding:18px 20px;display:flex;align-items:flex-start;gap:14px;transition:all .2s;}
+.cert-card:hover{border-color:var(--amber);background:var(--surface2);}
+.cert-icon{font-size:22px;line-height:1;flex-shrink:0;color:var(--amber);}
+.cert-name{font-family:var(--font-ui);font-size:15px;color:var(--text);font-weight:600;margin-bottom:4px;}
+.cert-issuer{font-size:12px;color:var(--text3);}
+#contact{background:var(--bg2);}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+.contact-label{font-size:11px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+.contact-value{color:var(--cyan);font-size:14px;text-decoration:none;display:flex;align-items:center;gap:8px;transition:all .2s;margin-bottom:20px;}
+.contact-value:hover{color:var(--green);text-shadow:0 0 8px var(--green);}
+.contact-terminal{background:var(--surface);border:1px solid var(--border);border-radius:4px;}
+#contact-output{padding:18px;min-height:140px;max-height:260px;overflow-y:auto;font-size:13px;display:flex;flex-direction:column;gap:4px;}
+.ct-line{color:var(--text2);line-height:1.7;}
+.ct-line.green{color:var(--green);}
+.ct-line.cyan{color:var(--cyan);}
+.ct-line.amber{color:var(--amber);}
+.ct-line.red{color:var(--red);}
+.ct-line.dim{color:var(--text3);}
+.ct-input-row{border-top:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;gap:8px;}
+.ct-prompt{color:var(--green);flex-shrink:0;font-size:13px;}
+#ct-input{background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-mono);font-size:13px;flex:1;caret-color:var(--green);}
+footer{border-top:1px solid var(--border);padding:30px 60px;display:flex;justify-content:space-between;align-items:center;background:var(--bg);font-size:12px;color:var(--text3);}
+.footer-logo{font-family:var(--font-display);font-size:18px;color:var(--green2);letter-spacing:2px;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--green2);}
+#matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.035;pointer-events:none;z-index:0;}
+section,nav,footer,#hero{position:relative;z-index:1;}
+.corner-dec{position:absolute;width:16px;height:16px;border-color:var(--green2);border-style:solid;opacity:.5;}
+.corner-dec.tl{top:20px;left:20px;border-width:1px 0 0 1px;}
+.corner-dec.tr{top:20px;right:20px;border-width:1px 1px 0 0;}
+.corner-dec.bl{bottom:20px;left:20px;border-width:0 0 1px 1px;}
+.corner-dec.br{bottom:20px;right:20px;border-width:0 1px 1px 0;}
+.section-bg-text{position:absolute;right:60px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:var(--font-display);font-size:120px;color:rgba(0,255,65,.02);letter-spacing:8px;pointer-events:none;white-space:nowrap;}
+@media(max-width:768px){section{padding:80px 24px;}#hero{padding:90px 24px 60px;}nav{padding:0 16px;}.nav-links{display:none;}.contact-layout{grid-template-columns:1fr;}.projects-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:12px;text-align:center;}.hero-corner{display:none;}}
+</style>
+</head>
+<body>
+<canvas id="matrix-canvas"></canvas>
+
+<!-- BIOS BOOT -->
+<div id="bios">
+  <div id="bios-lines"></div>
+  <div id="bios-bar-wrap" style="display:none">
+    <span class="bios-bar-label">LOADING PORTFOLIO.SYS</span>
+    <div id="bios-bar"><div id="bios-bar-fill"></div></div>
+    <span id="bios-bar-pct">0%</span>
+  </div>
+  <button id="skip-btn" onclick="skipBios()">[ SKIP BOOT ]</button>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+<nav>
+  <div class="nav-left">
+    <span class="nav-logo">PRMSWRE</span>
+    <span class="nav-sep">//</span>
+    <span class="nav-status"><span class="status-dot"></span>ONLINE &middot; OPEN TO WORK</span>
+  </div>
+  <div class="nav-links">
+    <a href="#skills">SKILLS</a>
+    <a href="#experience">EXPERIENCE</a>
+    <a href="#projects">PROJECTS</a>
+    <a href="#certs">CERTS</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+  <div class="nav-right">
+    <span id="live-date"></span>
+    <span id="live-clock"></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="corner-dec tl"></div><div class="corner-dec tr"></div>
+  <div class="corner-dec bl"></div><div class="corner-dec br"></div>
+  <div class="hero-corner tl">ROOT@PORTFOLIO:~$ <span style="color:var(--green)">&#9608;</span></div>
+  <div class="hero-corner tr">SYS_VER: 2026.06<br>KERNEL: JAVA-FULLSTACK</div>
+  <div class="hero-corner bl">LOC: TAMIL NADU, INDIA</div>
+  <div class="hero-corner br">STATUS: <span style="color:var(--green)">AVAILABLE</span></div>
+  <div class="hero-eyebrow">INITIALIZING DEVELOPER PROFILE</div>
+  <h1 class="hero-name" data-text="PARAMESWAR E">PARAMESWAR E</h1>
+  <div class="hero-title-line">Full Stack <span>Java</span> Developer</div>
+  <div class="terminal-window">
+    <div class="terminal-titlebar">
+      <div class="terminal-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="terminal-label">bash &mdash; parameswar@portfolio: ~</span>
+    </div>
+    <div class="terminal-body">
+      <div class="terminal-prompt">
+        <span class="prompt-sym">parameswar@portfolio:~$</span>
+        <span class="prompt-text">whoami --verbose</span>
+      </div>
+      <span id="typing-output"></span><span class="cursor-blink" id="cursor"></span>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-badge"><span class="icon">&#9993;</span><span>parameswarbe2099@gmail.com</span></div>
+    <div class="hero-badge"><span class="icon">&#9881;</span><span class="val">Spring Boot &middot; React.js &middot; MySQL</span></div>
+    <div class="hero-badge"><span class="icon">&#9729;</span><span class="val">Cloudflare &middot; Render &middot; Vercel</span></div>
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn-primary">&#9654; VIEW PROJECTS</a>
+    <a href="#contact" class="btn-secondary">&#9000; CONTACT</a>
+    <a href="https://github.com/ParameswarElamaran" target="_blank" class="btn-secondary">&#8962; GITHUB</a>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-bg-text">SKILLS</div>
+  <div class="section-header">
+    <span class="section-num">01 //</span>
+    <h2 class="section-title">TECH STACK</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card"><div class="skill-cat">Backend</div><div class="skill-name">Java</div><div class="skill-tags"><span class="tag">Core Java</span><span class="tag">OOP</span><span class="tag">Collections</span><span class="tag">Streams</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Framework</div><div class="skill-name">Spring Boot</div><div class="skill-tags"><span class="tag">Spring MVC</span><span class="tag">Spring Security</span><span class="tag">JPA</span><span class="tag">Hibernate</span><span class="tag">Maven</span></div></div>
+    <div class="skill-card"><div class="skill-cat">API</div><div class="skill-name">REST API</div><div class="skill-tags"><span class="tag">CRUD</span><span class="tag">JDBC</span><span class="tag">Postman</span><span class="tag">Fetch API</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Frontend</div><div class="skill-name">React.js</div><div class="skill-tags"><span class="tag">JavaScript</span><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">Hooks</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Database</div><div class="skill-name">SQL / MySQL</div><div class="skill-tags"><span class="tag">Spring Data JPA</span><span class="tag">CRUD Ops</span><span class="tag">Relational DB</span></div></div>
+    <div class="skill-card"><div class="skill-cat">DevOps</div><div class="skill-name">Deployment</div><div class="skill-tags"><span class="tag">Cloudflare</span><span class="tag">Render</span><span class="tag">Vercel</span><span class="tag">Git</span><span class="tag">GitHub</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Electrical Tools</div><div class="skill-name">PSCAD / ETAP</div><div class="skill-tags"><span class="tag">MATLAB</span><span class="tag">Electrical CAD</span><span class="tag">Power Systems</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Knowledge</div><div class="skill-name">Security &amp; VCS</div><div class="skill-tags"><span class="tag">Cybersecurity Basics</span><span class="tag">Ethical Hacking</span><span class="tag">Git/GitHub</span></div></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-bg-text">EXP</div>
+  <div class="section-header">
+    <span class="section-num">02 //</span>
+    <h2 class="section-title">EXPERIENCE</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2024 &ndash; PRESENT</div>
+      <div class="timeline-role">Full Stack Java Developer</div>
+      <div class="timeline-org">// Self-Learning &amp; Personal Projects</div>
+      <div class="timeline-body"><ul>
+        <li>Completed Core Java, Spring Boot, SQL, React.js, HTML, CSS, and JavaScript training through structured self-learning</li>
+        <li>Built full-stack web applications using Spring Boot backend and React.js frontend</li>
+        <li>Developed RESTful APIs and integrated SQL databases using Spring Data JPA</li>
+        <li>Implemented CRUD operations and frontend-backend communication via Fetch API</li>
+        <li>Used Git &amp; GitHub for version control across all projects</li>
+        <li>Deployed applications on Cloudflare, Render, and Vercel cloud platforms</li>
+      </ul></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2017 &ndash; 2020</div>
+      <div class="timeline-role">B.E. in Electrical &amp; Electronics Engineering</div>
+      <div class="timeline-org">// SRM Valliammai Engineering College &middot; CGPA: 8.21</div>
+      <div class="timeline-body"><ul>
+        <li>Specialized in power systems, protection, and industrial automation</li>
+        <li>Project: Differential Protection for DC Distribution Networks using optical fiber &amp; MMC converters</li>
+        <li>Expertise in PSCAD, ETAP, MATLAB, and Electrical CAD</li>
+      </ul></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2014 &ndash; 2017</div>
+      <div class="timeline-role">Diploma &ndash; Electrical &amp; Electronics Engineering</div>
+      <div class="timeline-org">// Adhiparasakthi Polytechnic College</div>
+      <div class="timeline-body"><ul>
+        <li>Foundation in electrical circuits, electronics, and engineering principles</li>
+        <li>Project: DC Mobile Charger using Solar Power (5V 2A, battery-free)</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-bg-text">PROJ</div>
+  <div class="section-header">
+    <span class="section-num">03 //</span>
+    <h2 class="section-title">PROJECTS</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card project-featured">
+      <div class="project-idx">PROJECT_001 &middot; FEATURED</div>
+      <div class="project-name">Employee Management System</div>
+      <div class="project-stack"><span class="stack-tag">Spring Boot</span><span class="stack-tag">React.js</span><span class="stack-tag">MySQL</span><span class="stack-tag">REST API</span><span class="stack-tag">JPA</span></div>
+      <ul class="project-desc">
+        <li>Full-stack employee management with Spring Boot backend and React.js frontend</li>
+        <li>RESTful APIs for complete employee CRUD operations</li>
+        <li>MySQL database integration via Spring Data JPA</li>
+        <li>Frontend-backend communication using Fetch API</li>
+        <li>Deployed on Cloudflare (frontend) and Render (backend)</li>
+      </ul>
+    </div>
+    <div class="project-card">
+      <div class="project-idx">PROJECT_002</div>
+      <div class="project-name">Personal Portfolio Website</div>
+      <div class="project-stack"><span class="stack-tag">React.js</span><span class="stack-tag">JavaScript</span><span class="stack-tag">CSS3</span><span class="stack-tag">Cloudflare</span></div>
+      <ul class="project-desc">
+        <li>Responsive personal portfolio built with React.js</li>
+        <li>Showcases projects, skills, and professional profile</li>
+        <li>Deployed on Cloudflare with backend services integrated</li>
+      </ul>
+    </div>
+    <div class="project-card">
+      <div class="project-idx">PROJECT_003 &middot; R&amp;D</div>
+      <div class="project-name">Solar DC Mobile Charger</div>
+      <div class="project-stack"><span class="stack-tag">Power Electronics</span><span class="stack-tag">Solar PV</span><span class="stack-tag">5V 2A DC</span></div>
+      <ul class="project-desc">
+        <li>Battery-free solar charging system outputting 5V 2A for mobile devices</li>
+        <li>Designed direct solar-to-mobile power solution</li>
+        <li>Eliminated dependency on grid or battery storage</li>
+      </ul>
+    </div>
+    <div class="project-card">
+      <div class="project-idx">PROJECT_004 &middot; R&amp;D</div>
+      <div class="project-name">Smart Library RFID System</div>
+      <div class="project-stack"><span class="stack-tag">RFID</span><span class="stack-tag">IoT</span><span class="stack-tag">Embedded Systems</span></div>
+      <ul class="project-desc">
+        <li>RFID-based system for real-time book tracking and availability</li>
+        <li>Automated logging when books pass through entry/exit sensors</li>
+        <li>Reduced manual tracking and improved accuracy</li>
+      </ul>
+    </div>
+    <div class="project-card">
+      <div class="project-idx">PROJECT_005 &middot; R&amp;D</div>
+      <div class="project-name">DC Distribution Network Protection</div>
+      <div class="project-stack"><span class="stack-tag">Protection Relay</span><span class="stack-tag">MMC</span><span class="stack-tag">Optical Fiber</span><span class="stack-tag">PSCAD</span></div>
+      <ul class="project-desc">
+        <li>Pilot protection with bi-directional communication for fault detection</li>
+        <li>MMC converts AC to DC for distribution network</li>
+        <li>Optical fiber relay for high-speed fault data exchange</li>
+        <li>Identifies fault location across DC distribution segments</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="section-bg-text">CERT</div>
+  <div class="section-header">
+    <span class="section-num">04 //</span>
+    <h2 class="section-title">CERTIFICATIONS</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-card"><div class="cert-icon">&#9672;</div><div><div class="cert-name">Core Java</div><div class="cert-issuer">Great Learning</div></div></div>
+    <div class="cert-card"><div class="cert-icon">&#9672;</div><div><div class="cert-name">Java Full Stack Learning Path</div><div class="cert-issuer">Self-Directed &middot; Online</div></div></div>
+    <div class="cert-card"><div class="cert-icon">&#9672;</div><div><div class="cert-name">Spring Boot Course</div><div class="cert-issuer">Amigoscode</div></div></div>
+    <div class="cert-card"><div class="cert-icon">&#9672;</div><div><div class="cert-name">Basic Cybersecurity Concepts</div><div class="cert-issuer">Ethical Learning &middot; Self-Study</div></div></div>
+    <div class="cert-card"><div class="cert-icon">&#9672;</div><div><div class="cert-name">Version Control with Git &amp; GitHub</div><div class="cert-issuer">Applied through Projects</div></div></div>
+    <div class="cert-card"><div class="cert-icon">&#9672;</div><div><div class="cert-name">Web App Deployment &amp; Maintenance</div><div class="cert-issuer">Cloudflare &middot; Render &middot; Vercel</div></div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-bg-text">CONTACT</div>
+  <div class="section-header">
+    <span class="section-num">05 //</span>
+    <h2 class="section-title">CONTACT</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-layout">
+    <div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:32px;">Full Stack Java Developer open to entry-level Software Engineer or Java Developer roles.<br>Let's build something together.</p>
+      <div class="contact-label">// EMAIL</div>
+      <a class="contact-value" href="mailto:parameswarbe2099@gmail.com">&#9993; parameswarbe2099@gmail.com</a>
+      <div class="contact-label">// PHONE</div>
+      <a class="contact-value" href="tel:9677587955">&#9742; +91 9677587955</a>
+      <div class="contact-label">// LOCATION</div>
+      <span class="contact-value" style="cursor:default;">&#8982; Tamil Nadu, India</span>
+      <div class="contact-label">// LINKEDIN</div>
+      <a class="contact-value" href="https://www.linkedin.com/in/parameswar-elamaran-627969182" target="_blank">&#10551; linkedin.com/in/parameswar-elamaran</a>
+      <div class="contact-label">// GITHUB</div>
+      <a class="contact-value" href="https://github.com/ParameswarElamaran" target="_blank">&#8962; github.com/ParameswarElamaran</a>
+    </div>
+    <div class="contact-terminal">
+      <div class="terminal-titlebar">
+        <div class="terminal-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <span class="terminal-label">terminal &mdash; contact.sh</span>
+      </div>
+      <div id="contact-output">
+        <div class="ct-line dim">// Interactive terminal &mdash; try a command</div>
+        <div class="ct-line green">$ Available: help, skills, contact, github, projects, clear</div>
+      </div>
+      <div class="ct-input-row">
+        <span class="ct-prompt">visitor@portfolio:~$</span>
+        <input id="ct-input" type="text" placeholder="type a command..." autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">PARAMESWAR_E</div>
+  <div>Full Stack Java Developer &middot; Tamil Nadu, India</div>
+  <div>&copy; 2026 &middot; PORTFOLIO.SYS v2.0</div>
+</footer>
+</div>
+
+<script>
+// MATRIX RAIN
+(function(){
+  const canvas=document.getElementById('matrix-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,cols,drops;
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*JAVA';
+  function init(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;cols=Math.floor(W/18);drops=Array(cols).fill(1);}
+  function draw(){
+    ctx.fillStyle='rgba(5,10,5,0.05)';ctx.fillRect(0,0,W,H);
+    for(let i=0;i<drops.length;i++){
+      const ch=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillStyle=Math.random()>.97?'#00f5ff':(Math.random()>.9?'#ffb300':'#00cc33');
+      ctx.font='13px monospace';
+      ctx.fillText(ch,i*18,drops[i]*18);
+      if(drops[i]*18>H&&Math.random()>.975)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  init();window.addEventListener('resize',init);setInterval(draw,55);
+})();
+
+// CLOCK
+function updateClock(){
+  const now=new Date(),p=n=>String(n).padStart(2,'0');
+  document.getElementById('live-clock').textContent=p(now.getHours())+':'+p(now.getMinutes())+':'+p(now.getSeconds());
+  document.getElementById('live-date').textContent=now.toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'2-digit'});
+}
+updateClock();setInterval(updateClock,1000);
+
+// BIOS
+const biosLines=[
+  {t:'PORTFOLIO BIOS v3.14  Copyright (C) 2026 PRMSWRE Systems',c:'white'},
+  {t:'-----------------------------------------------------------------------',c:'dim'},
+  {t:'CPU: JAVA-FULLSTACK-CORE @ 4.20GHz  [SPRING BOOT ENABLED]',c:''},
+  {t:'RAM: 16384MB DDR5  STATUS: OK',c:''},
+  {t:'STORAGE: 512GB SSD  BOOT: PORTFOLIO.SYS',c:''},
+  {t:'',c:''},
+  {t:'Detecting developer modules...',c:'dim'},
+  {t:'  [OK] React.js Renderer .................. LOADED',c:'green'},
+  {t:'  [OK] Spring Boot Application Server ..... LOADED',c:'green'},
+  {t:'  [OK] MySQL Database Driver .............. LOADED',c:'green'},
+  {t:'  [OK] REST API Interface ................. LOADED',c:'green'},
+  {t:'  [OK] GitHub Version Control ............. LOADED',c:'green'},
+  {t:'  [OK] Cloud Deployment Services .......... LOADED',c:'green'},
+  {t:'  [WARN] Electrical Engineering mode ......... STANDBY',c:'amber'},
+  {t:'  [OK]  Cybersecurity Awareness ........... ACTIVE',c:'green'},
+  {t:'',c:''},
+  {t:'DEVELOPER: PARAMESWAR E',c:'cyan'},
+  {t:'LOCATION: TAMIL NADU, INDIA',c:'cyan'},
+  {t:'STATUS: SEEKING ENTRY-LEVEL SOFTWARE ENGINEER ROLE',c:'cyan'},
+  {t:'',c:''},
+  {t:'Mounting portfolio filesystem...',c:'dim'},
+];
+
+let biosSkipped=false;
+
+function skipBios(){
+  biosSkipped=true;
+  document.getElementById('bios').classList.add('hidden');
+  document.getElementById('main').classList.add('visible');
+  startTyping();
+}
+
+async function runBios(){
+  const container=document.getElementById('bios-lines');
+  for(let i=0;i<biosLines.length;i++){
+    if(biosSkipped)return;
+    await new Promise(r=>setTimeout(r,90));
+    if(biosSkipped)return;
+    const div=document.createElement('div');
+    div.className='bios-line '+(biosLines[i].c||'');
+    div.textContent=biosLines[i].t||'\u00A0';
+    container.appendChild(div);
+  }
+  if(biosSkipped)return;
+  const barWrap=document.getElementById('bios-bar-wrap');
+  barWrap.style.display='flex';
+  const fill=document.getElementById('bios-bar-fill');
+  const pct=document.getElementById('bios-bar-pct');
+  let p=0;
+  const iv=setInterval(()=>{
+    if(biosSkipped){clearInterval(iv);return;}
+    p+=Math.random()*5+2;
+    if(p>=100){p=100;clearInterval(iv);launchSite();}
+    fill.style.width=p+'%';
+    pct.textContent=Math.floor(p)+'%';
+  },70);
+}
+
+function launchSite(){
+  if(biosSkipped)return;
+  setTimeout(()=>{
+    if(biosSkipped)return;
+    document.getElementById('bios').classList.add('hidden');
+    document.getElementById('main').classList.add('visible');
+    startTyping();
+  },400);
+}
+
+// TYPING
+const typingLines=[
+  '> NAME: Parameswar E',
+  '> ROLE: Full Stack Java Developer',
+  '> STACK: Java | Spring Boot | React.js | MySQL',
+  '> STATUS: Open to entry-level SWE/Java roles',
+  '> MOTTO: "Build. Deploy. Iterate."',
+];
+
+function startTyping(){
+  const output=document.getElementById('typing-output');
+  let li=0,ci=0,built=[];
+  function tick(){
+    if(li>=typingLines.length)return;
+    const line=typingLines[li];
+    if(ci<=line.length){
+      output.textContent=[...built,line.slice(0,ci)].join('\n');
+      ci++;
+      setTimeout(tick,55+Math.random()*25);
+    } else {
+      built.push(line);
+      li++;ci=0;
+      setTimeout(tick,280);
+    }
+  }
+  output.textContent='';
+  tick();
+}
+
+// CONTACT TERMINAL
+const cmds={
+  help:()=>[{t:'// Commands:',c:'dim'},{t:'  skills | contact | github | linkedin | projects | hello | clear',c:'green'}],
+  skills:()=>[{t:'// TECH STACK:',c:'cyan'},{t:'  Backend: Java, Spring Boot, Spring MVC, JPA, Hibernate',c:''},{t:'  Frontend: React.js, JavaScript, HTML5, CSS3',c:''},{t:'  Database: MySQL, SQL, Spring Data JPA',c:''},{t:'  Tools: Git, GitHub, Postman, Maven',c:''},{t:'  Deploy: Cloudflare, Render, Vercel',c:''}],
+  contact:()=>[{t:'// CONTACT:',c:'cyan'},{t:'  Email: parameswarbe2099@gmail.com',c:''},{t:'  Phone: +91 9677587955',c:''},{t:'  Location: Tamil Nadu, India',c:''}],
+  github:()=>{window.open('https://github.com/ParameswarElamaran','_blank');return[{t:'// Opening GitHub profile... done',c:'green'}];},
+  linkedin:()=>{window.open('https://www.linkedin.com/in/parameswar-elamaran-627969182','_blank');return[{t:'// Opening LinkedIn... done',c:'green'}];},
+  projects:()=>[{t:'// PROJECTS:',c:'cyan'},{t:'  [001] Employee Management System',c:''},{t:'  [002] Portfolio Website',c:''},{t:'  [003] Solar DC Mobile Charger',c:''},{t:'  [004] Smart Library RFID',c:''},{t:'  [005] DC Distribution Protection',c:''}],
+  hello:()=>[{t:"// Hello! I'm Parameswar, Full Stack Java Dev from Tamil Nadu.",c:'green'},{t:"// Eager to contribute, learn, and grow. Let's connect!",c:'cyan'}],
+  clear:()=>'CLEAR',
+};
+
+const ctInput=document.getElementById('ct-input');
+const ctOutput=document.getElementById('contact-output');
+ctInput.addEventListener('keydown',function(e){
+  if(e.key!=='Enter')return;
+  const cmd=this.value.trim().toLowerCase();this.value='';
+  if(!cmd)return;
+  const cl=document.createElement('div');cl.className='ct-line green';cl.textContent='$ '+cmd;ctOutput.appendChild(cl);
+  if(cmds[cmd]){
+    const r=cmds[cmd]();
+    if(r==='CLEAR'){ctOutput.innerHTML='';return;}
+    r.forEach(row=>{const d=document.createElement('div');d.className='ct-line '+(row.c||'');d.textContent=row.t;ctOutput.appendChild(d);});
+  } else {
+    const d=document.createElement('div');d.className='ct-line red';d.textContent='bash: '+cmd+': command not found. Try "help"';ctOutput.appendChild(d);
+  }
+  ctOutput.scrollTop=ctOutput.scrollHeight;
+});
+
+window.addEventListener('load',runBios);
+</script>
+</body>
+</html>
